@@ -1,7 +1,10 @@
 const fs = require('fs').promises
 const path = require('path')
-const contactsPath = path.basename('.\\db\\contacts.json')
-console.log(contactsPath);
+const contactsPath = path.format({
+   dir: '.\\db',
+   base: 'contacts.json'
+ });
+
 async function listContacts() {
      try {
         const data = await fs.readFile(contactsPath)
@@ -11,7 +14,7 @@ async function listContacts() {
      }
      
   }
-  
+
  async function getContactById(contactId) {
     const contacts = await listContacts();
   const id = contacts.find(({id}) => id === contactId.toString());
@@ -34,11 +37,12 @@ async function listContacts() {
     contacts.push(contact)
     try {
         await fs.writeFile(contactsPath, JSON.stringify(contacts))
+        return contact
     } catch (error) {
         console.log(error);
     }
   }
-// addContact('gal', 'fas@gm.com', '56378')
+
  module.exports = {
     listContacts,
     getContactById,
