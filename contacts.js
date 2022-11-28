@@ -10,21 +10,30 @@ async function listContacts() {
         const data = await fs.readFile(contactsPath)
         return JSON.parse(data)
      } catch (error) {
-        console.log(error);
+        console.log(error.message);
      }
      
   }
 
  async function getContactById(contactId) {
-    const contacts = await listContacts();
+   try {
+   const contacts = await listContacts();
   const id = contacts.find(({id}) => id === contactId.toString());
   return id
+   } catch (error) {
+      console.log(error.message);
+   }
+    
   }
 
  async function removeContact(contactId) {
-   const contacts = await listContacts();
+   try {
+      const contacts = await listContacts();
    const deleteContacts = contacts.filter(({id})=> id !== contactId.toString())
    return deleteContacts
+   } catch (error) {
+      console.log(error.message);
+   }
   }
  
  async function addContact(name, email, phone) {
@@ -39,7 +48,7 @@ async function listContacts() {
         await fs.writeFile(contactsPath, JSON.stringify(contacts))
         return contact
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
     }
   }
 
